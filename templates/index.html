@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>closetly | AI Wardrobe</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='desktop-layout.css') }}">
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="brand"><span class="brand-mark">✦</span><span>AI Wardrobe</span></div>
+    <nav>
+      <a class="active" href="#today"><span>◷</span> 今日の提案</a>
+      <a href="/wardrobe"><span>▦</span> ワードローブ</a>
+      <a href="/settings"><span>⚙</span> 設定</a>
+    </nav>
+    <div class="sidebar-bottom">
+      <a class="mini-profile" href="/settings" aria-label="ユーザー設定"><div class="avatar">{% if profile.avatar %}<img src="{{ profile.avatar }}" alt="アバター">{% else %}A{% endif %}</div><div><b>こんにちは、{{ profile.display_name }}</b><small>あなたのクローゼット</small></div></a>
+    </div>
+  </aside>
+  <main>
+    <header class="topbar"><div><p class="eyebrow">DAILY WEATHER OUTFIT PLANNER</p><h1>今日のスタイリング</h1><p id="todayDate" class="date-line"></p></div><div class="top-actions"><a class="avatar small" href="/settings" aria-label="ユーザー設定へ">{% if profile.avatar %}<img src="{{ profile.avatar }}" alt="アバター">{% else %}A{% endif %}</a></div></header>
+    <section id="today" class="hero-grid">
+      <div class="weather-card card">
+        <div class="card-label">TODAY'S WEATHER <span id="weatherLocation">東京</span></div>
+        <div class="weather-main"><span id="weatherIcon" class="weather-icon">☀</span><strong id="temperature">18°</strong><div><b id="condition">晴れ</b><small>体感 <span id="feelsLike">17</span>°</small></div></div>
+        <div class="weather-meta"><span>☂ 降水確率 <b id="rainChance">10%</b></span><span>↕ 最高 / 最低 <b id="temperatureRange">--</b></span></div>
+      </div>
+      <div class="tip-card"><div class="sun">✦</div><div><b>今日は軽やかに。</b><p>朝晩は少し冷えるので、脱ぎ着できる<br>レイヤードがおすすめです。</p></div></div>
+    </section>
+    <section class="section-head"><div><p class="eyebrow">CURATED FOR YOU</p><h2>今日のコーディネート</h2></div><button class="outline-btn" onclick="refreshOutfit()">↻ 別の提案</button></section>
+    <section id="outfit-recommendation" class="outfit-layout">
+      <div id="outfitItems" class="outfit-display card"></div>
+      <div class="reason-card card"><div class="reason-title"><span>✦</span><b>この組み合わせの理由</b></div><ul id="reasons"></ul><div class="feedback-box"><p>このコーデ、どう思う？</p><div class="feedback-actions"><button id="likeButton" type="button" aria-pressed="false" onclick="sendOverallFeedback('like')">♡ 好き</button><button id="dislikeButton" type="button" aria-pressed="false" onclick="sendOverallFeedback('dislike')">♧ 好みではない</button></div></div></div>
+    </section>
+    <section class="notification card"><div class="bell">♧</div><div><b>毎朝のおすすめを受け取る</b><p>毎朝 <span id="notificationTime">07:30</span> に今日のコーデをお知らせします。</p></div><label class="switch"><input id="notificationToggle" type="checkbox" onchange="saveSettings()"><span></span></label></section>
+  </main>
+  <div id="modal" class="modal hidden"><div class="modal-panel"><button class="close" onclick="closeModal()">×</button><p class="eyebrow">ADD TO COLLECTION</p><h2>服を登録する</h2><form id="itemForm"><label class="dropzone" for="photo"><span>＋</span><b>写真をアップロード</b><small>PNG, JPG, WEBP / 最大8MB</small><input id="photo" name="photo" type="file" accept="image/*" required></label><label>服の名前<input name="name" placeholder="例：ジーンズ（デニム）" maxlength="80"></label><button class="primary-btn full" type="submit">登録完了</button><p id="formError" class="form-error"></p></form></div></div>
+  <div id="toast" class="toast"></div>
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+  <script src="{{ url_for('static', filename='notifications.js') }}"></script>
+</body>
+</html>

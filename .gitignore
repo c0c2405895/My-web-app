@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+.pytest_cache/
+
+# Runtime data
+uploads/*
+!uploads/.gitkeep
+app/wardrobe.json
+
+# Local tooling
+.vscode/
